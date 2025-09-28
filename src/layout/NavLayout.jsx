@@ -2,7 +2,7 @@ import Logo from "../assets/logo.png";
 
 const NavLayout = ({ setIsChecked, isChecked }) => {
   return (
-    <header className="container mx-auto flex gap-5 justify-between items-center bg-[#ffffff10] px-5 py-3 sm:px-10 sm:py-5 rounded-4xl">
+    <header className="container mx-auto flex gap-5 justify-between items-center px-5 py-3 sm:px-10 sm:py-5 rounded-4xl">
       <a href="#home" className="logo">
         <img src={Logo} alt="Logo" className="max-w-[70px] max-h-[70px]" />
       </a>
