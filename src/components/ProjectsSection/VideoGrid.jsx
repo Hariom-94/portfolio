@@ -6,14 +6,14 @@ const videos = [
   {
     id: 1,
     poster:
-      "https://1drv.ms/i/c/958d205303c76c02/EVQgibkRz4xEreA_70lC0gIBKpRJkLqq3sRwyStbSLfSJQ",
+      "https://raw.githubusercontent.com/Hariom-94/portfolio/main/src/assets/thumbnail%20nepalGenZ.png",
     videoEmbed:
       "https://player.mux.com/m3L2HIK4SxNdl00q1eggbzVnz4CaOkOaTo5y3EQ76ju8?metadata-video-title=genZ+Nepal&video-title=genZ+Nepal",
   },
   {
     id: 2,
     poster:
-      "https://image.mux.com/TbBrc2IYoJ54Vla3ePlLqPw2EKfifUqT37n01apxnkXQ/thumbnail.png?time=2",
+      "https://raw.githubusercontent.com/Hariom-94/portfolio/main/src/assets/thumbnail%20amazon.png",
     videoEmbed:
       "https://player.mux.com/TbBrc2IYoJ54Vla3ePlLqPw2EKfifUqT37n01apxnkXQ?metadata-video-title=TRUTH+BEHIND+AMAZON+LOGO&video-title=TRUTH+BEHIND+AMAZON+LOGO",
   },
