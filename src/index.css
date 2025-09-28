@@ -269,6 +269,7 @@ header a:hover {
 header {
   position: relative;
   border: 1px solid var(--white20);
+  background-color: var(--white10);
 }
 
 header .navigation li {
