@@ -275,6 +275,11 @@ header .navigation li {
   text-align: center;
 }
 
+header .navigation {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
 @media (max-width: 620px) {
   .menu {
     display: block;
