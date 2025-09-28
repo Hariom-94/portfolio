@@ -32,6 +32,7 @@ export default function Skills() {
                 src={skill.img}
                 alt={skill.title}
                 className="w-full h-full object-contain"
+                loading="lazy"
               />
             </div>
             <div className="card-title text-center">
