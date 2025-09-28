@@ -53,7 +53,7 @@ const App = () => {
           <Skills />
         </div>
 
-        <div className="container bg-container mx-auto px-4 sm:px-0">
+        <div className="bg-container mx-auto px-4 sm:px-0">
           <ProjectsSection />
         </div>
 

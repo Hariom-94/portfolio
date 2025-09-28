@@ -103,7 +103,7 @@ h3 {
   left: 0;
   height: 100%;
   width: 100%;
-  background-image: url("./assets/bg.png");
+  background-image: url("./assets/bg-min.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -117,7 +117,7 @@ h3 {
   left: 50%;
   height: 100%;
   width: 100%;
-  background-image: url(./assets/pricing-bg.png);
+  background-image: url(./assets/bg-min.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
