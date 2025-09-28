@@ -1,8 +1,8 @@
-import AfterEffect from "../../assets/afterEffect.svg"; // adjust path
-import PremierePro from "../../assets/premiere-pro.svg"; // adjust path
-import Krita from "../../assets/krita.svg"; // adjust path
+import AfterEffect from "../../assets/afterEffect.png"; // adjust path
+import PremierePro from "../../assets/premiere-pro.png"; // adjust path
+import Krita from "../../assets/krita.png"; // adjust path
 import CapCut from "../../assets/capcut.png"; // adjust path
-import AfterMotion from "../../assets/after-motion.webp"; // adjust path
+import AfterMotion from "../../assets/after-motion.png"; // adjust path
 import Photoshop from "../../assets/photoshop.png"; // adjust path
 import SectionHeader from "./SectionHeader";
 
