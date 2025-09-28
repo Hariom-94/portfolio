@@ -37,7 +37,7 @@ html {
 body {
   background-color: var(--black);
   font-family: var(--be-vietnam-pro);
-  background-image: url(./assets/hero-bg.png);
+  background-image: url(./assets/hero-bg-min.png);
   background-position: top -100px center;
   background-repeat: no-repeat;
   background-size: 200%;
