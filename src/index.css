@@ -1,0 +1,305 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Charm:wght@400;700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* Colors */
+  --black: #000000;
+  --black50: #00000050;
+
+  --white: #ffffff;
+  --white10: #ffffff10;
+  --white20: #ffffff20;
+  --white30: #ffffff30;
+  --white70: #ffffff70;
+
+  --blue-cola: #008ce9;
+
+  --azure: #008ff9;
+  --azure10: #008ff910;
+  --azure15: #008ff915;
+  --azure40: #008ff940;
+
+  --picton-blue: #4cc9fe;
+  --picton-blue60: #4cc9fe60;
+  --picton-blue50: #4cc9fe50;
+  --picton-blue20: #4cc9fe20;
+
+  /* Fonts */
+  --be-vietnam-pro: "Be Vietnam Pro", sans-serif;
+  --charm: "Charm", cursive;
+  --work-sans: "Work Sans", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--black);
+  font-family: var(--be-vietnam-pro);
+  background-image: url(./assets/hero-bg.png);
+  background-position: top -100px center;
+  background-repeat: no-repeat;
+  background-size: 200%;
+  padding-top: 30px;
+}
+
+@media (min-width: 650px) {
+  body {
+    background-size: 100%;
+    padding-top: 50px;
+  }
+}
+
+h2 {
+  color: var(--white);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--be-vietnam-pro);
+}
+
+h2 + p {
+  color: var(--white);
+  font-family: var(--be-vietnam-pro);
+  font-weight: 200;
+}
+
+img {
+  width: 100%;
+}
+
+.skills-cards .card {
+  background-color: var(--azure15);
+  border: 1px solid var(--white20);
+  position: relative;
+  z-index: 1;
+}
+
+.skills-cards .blur {
+  z-index: -1;
+  height: 80px;
+  width: 80px;
+  background-color: var(--picton-blue60);
+  border-radius: 50%;
+  filter: blur(50px);
+  position: absolute;
+}
+
+h3 {
+  color: var(--white);
+}
+
+.bg-container {
+  position: relative;
+}
+
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url("./assets/bg.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  z-index: -2;
+}
+
+.contact-bg,
+.pricing-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  background-image: url(./assets/pricing-bg.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transform: translate(-50%, -50%);
+  z-index: -2;
+}
+
+.hero-section h1 {
+  color: var(--white);
+}
+
+.hero-section span {
+  font-family: var(--charm);
+  color: var(--blue-cola);
+}
+
+.hero-section p {
+  color: var(--white);
+  font-family: var(--work-sans);
+}
+
+.hero-section .btn {
+  color: var(--white);
+  border-radius: 25px;
+  padding: 8px 25px;
+  font-weight: light;
+  cursor: pointer;
+  font-family: var(--be-vietnam-pro);
+  letter-spacing: 0.7px;
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Primary button styles */
+.primary {
+  background-color: var(--blue-cola); /* Example primary color */
+  color: white;
+}
+
+/* Secondary button styles */
+.secondary {
+  color: white;
+  border: 1.5px solid var(--white);
+}
+
+/* Hover animation for both buttons */
+.btn:hover {
+  transform: scale(1.05); /* Slight scale-up effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Optional: Active state for click feedback */
+.btn:active {
+  transform: scale(0.95); /* Slight shrink on click */
+}
+
+footer {
+  color: var(--white);
+  background-color: #008ff925;
+  border-top: 2px solid #008ce930;
+}
+
+footer a,
+header a {
+  color: var(--white);
+  transition: 0.3s ease;
+  font-weight: 300;
+}
+
+footer a:hover,
+header a:hover {
+  color: var(--azure);
+}
+
+.go-to-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background-color: var(--azure);
+  color: #ffffff;
+  padding: 0.75rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  z-index: 50;
+  cursor: pointer;
+}
+
+.go-to-top:hover {
+  background-color: var(--picton-blue);
+}
+
+.go-to-top:focus {
+  box-shadow: 0 0 0 2px var(--blue-cola);
+}
+
+/* Optional: Style for the SVG icon inside the button */
+.go-to-top-icon {
+  width: 1.5rem; /* Tailwind's w-6 = 1.5rem */
+  height: 1.5rem; /* Tailwind's h-6 = 1.5rem */
+}
+
+/* menu animation */
+.hamburger {
+  cursor: pointer;
+}
+
+.hamburger input {
+  display: none;
+}
+
+.hamburger svg {
+  /* The size of the SVG defines the overall size */
+  width: 30px;
+  /* Define the transition for transforming the SVG */
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line {
+  fill: none;
+  stroke: white;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  /* Define the transition for transforming the Stroke */
+  transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-top-bottom {
+  stroke-dasharray: 12 63;
+}
+
+.hamburger input:checked + svg {
+  transform: rotate(-45deg);
+}
+
+.hamburger input:checked + svg .line-top-bottom {
+  stroke-dasharray: 20 300;
+  stroke-dashoffset: -32.42;
+}
+
+.menu {
+  display: none;
+}
+
+header {
+  position: relative;
+  border: 1px solid var(--white20);
+}
+
+header .navigation li {
+  text-align: center;
+}
+
+@media (max-width: 620px) {
+  .menu {
+    display: block;
+  }
+  header .navigation {
+    display: none;
+  }
+
+  header .navigation.show {
+    position: absolute;
+    right: 0px;
+    top: 100px;
+    width: 150px;
+    display: block;
+    background-color: #008ff905;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--white30);
+  }
+
+  header .navigation ul {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}

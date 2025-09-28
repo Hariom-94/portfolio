@@ -1,0 +1,161 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Node.js and npm
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.vercel/
+.now/
+public/build/
+
+# Dependency directories
+bower_components/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Webpack and other bundler outputs
+webpack-stats.json
+bundle/
+coverage/
+
+# Testing frameworks
+test-results/
+coverage/
+junit.xml
+
+# Static site generators
+public/_site/
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# Frameworks and CMS
+wp-content/uploads/
+wp-content/cache/
+/cache/
+/public/hot
+
+# Sensitive files
+*.pem
+*.key
+*.cert
+*.env.*
+config/secrets.yml
+
+# Documentation and miscellaneous
+docs/_build/
+*.bak
+*.gho
+*.orig
+*.rej
+
+# Python (if used in web dev, e.g., Django/Flask)
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+
+# Ruby (if used, e.g., Rails)
+*.gem
+.bundle/
+vendor/bundle/
+Gemfile.lock
+
+# Database dumps
+*.sql
+*.sqlite3
+
+# Frontend frameworks (React, Vue, Angular, etc.)
+.angular/
+dist-ssr/
+*.tsbuildinfo
+
+# Parcel bundler
+.parcel-cache/
+
+# Gatsby
+public/
+.cache/
+
+# Next.js
+.next/
+out/
+
+# Nuxt.js
+.nuxt/
+output/
+
+# Svelte
+.svelte-kit/
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Miscellaneous
+*.lock
+*.cache
+*.min.js.map
+*.min.css.map

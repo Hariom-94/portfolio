@@ -1,0 +1,36 @@
+@import "../../index.css";
+
+.form {
+  background-color: var(--azure15);
+  color: var(--white);
+  font-family: var(--be-vietnam-pro);
+  padding: 1rem;
+  border: 2px solid var(--picton-blue20);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.form input,
+.form textarea {
+  background-color: var(--azure10);
+  border: 1px solid var(--azure40);
+  color: var(--white);
+  font-family: var(--work-sans);
+}
+
+.form input::placeholder {
+  color: var(--white70);
+}
+
+.form button {
+  background-color: var(--azure);
+  color: var(--white);
+  font-family: var(--be-vietnam-pro);
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.form button:hover {
+  background-color: var(--picton-blue);
+}

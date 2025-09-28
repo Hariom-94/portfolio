@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Silver",
+    "savePercentage": 25,
+    "originalPrice": 3200,
+    "discountedPrice": 2400,
+    "priceUnit": "/project",
+    "features": [
+      "1080p upto 30fps",
+      "Video Edit upto 60 sec",
+      "Video provided upto 2 min",
+      "Animation upto 15 sec",
+      "Revisions - 1",
+      "Captions",
+      "Color correction and color grading",
+      "SFX"
+    ],
+    "ctaText": "Start Your Project",
+    "blur": "left",
+    "message": "Hi there, I'd like to inquire about the *Silver Plan* for video editing (₹2400/project). I have a short video in mind. _How can we get started? *Thanks!*_ "
+  },
+  {
+    "name": "Gold",
+    "savePercentage": 25,
+    "originalPrice": 7500,
+    "discountedPrice": 5600,
+    "priceUnit": "/project",
+    "features": [
+      "1440p upto 60fps",
+      "Video edit upto 2 min",
+      "Video provided upto 5 min",
+      "Animation upto 45 sec",
+      "Revisions - 3",
+      "Captions",
+      "Advance color correction and color grading",
+      "Advance SFX"
+    ],
+    "ctaText": "Upgrade Your Video",
+    "blur": "right",
+    "message": "Hello! I'm interested in your *Gold Plan* for video editing. It looks like the right fit for my project. _*Can we discuss the details?*_"
+  },
+  {
+    "name": "Platinum",
+    "savePercentage": 25,
+    "originalPrice": 16000,
+    "discountedPrice": 12000,
+    "priceUnit": "/project",
+    "features": [
+      "2160p upto 60fps",
+      "Video edit upto 5 min",
+      "Video provided upto 10 min",
+      "Animation upto 2 min",
+      "Revisions - Unlimited",
+      "Captions",
+      "Advance color correction and color grading",
+      "Advance SFX"
+    ],
+    "ctaText": "Go Platinum",
+    "blur": "left",
+    "message": "Hi there. I'm interested in the *Platinum Plan* for my project. _*Please let me know how to proceed.*_"
+  }
+]

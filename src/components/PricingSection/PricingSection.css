@@ -1,0 +1,168 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Charm:wght@400;700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* Colors */
+  --black: #000000;
+
+  --white: #ffffff;
+  --white10: #ffffff10;
+  --white20: #ffffff20;
+  --white30: #ffffff30;
+  --white70: #ffffff70;
+
+  --blue-cola: #008ce9;
+
+  --azure: #008ff9;
+  --azure10: #008ff910;
+  --azure15: #008ff915;
+  --azure40: #008ff940;
+  --azure60: #008ff960;
+
+  --picton-blue: #4cc9fe;
+  --picton-blue80: #4cc9fe80;
+  --picton-blue60: #4cc9fe60;
+  --picton-blue50: #4cc9fe50;
+  --picton-blue20: #4cc9fe20;
+
+  /* Fonts */
+  --be-vietnam-pro: "Be Vietnam Pro", sans-serif;
+  --charm: "Charm", cursive;
+  --work-sans: "Work Sans", sans-serif;
+}
+
+.pricing-info .type {
+  font-size: 1.5rem;
+  color: var(--white);
+  font-weight: 200;
+  margin-bottom: 10px;
+}
+
+.pricing-info .discount .offer {
+  background-color: var(--azure10);
+  color: var(--picton-blue);
+  padding: 5px 25px;
+  border-radius: 5px;
+  border: 1px solid var(--azure40);
+  margin-right: 8px;
+}
+
+.pricing-info .discount :last-child {
+  color: var(--picton-blue60);
+  text-decoration: line-through;
+}
+
+.pricing-info .price {
+  color: var(--picton-blue80);
+}
+
+.pricing-info .price span {
+  color: var(--azure);
+}
+
+.pricing-card {
+  background-color: var(--azure15);
+  border-radius: 10px;
+  border: 1px solid var(--white30);
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+.top-left-blur {
+  position: absolute;
+  top: -50px; /* Position it to peek from behind */
+  left: -50px;
+  height: 150px;
+  width: 150px;
+  background-color: var(--azure);
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(40px);
+}
+
+.top-right-blur {
+  position: absolute;
+  top: -50px; /* Position it to peek from behind */
+  right: -50px;
+  height: 150px;
+  width: 150px;
+  background-color: var(--azure);
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(40px);
+}
+
+.bottom-right-blur {
+  position: absolute;
+  right: -50px; /* Position it to peek from behind */
+  bottom: -50px;
+  height: 150px;
+  width: 150px;
+  background-color: var(--azure);
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(40px);
+}
+
+.bottom-left-blur {
+  position: absolute;
+  left: -50px; /* Position it to peek from behind */
+  bottom: -50px;
+  height: 150px;
+  width: 150px;
+  background-color: var(--azure);
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(40px);
+}
+
+.pricing-content li {
+  font-family: var(--be-vietnam-pro);
+  font-weight: 200;
+  padding-block: 10px;
+  border-top: 1px solid var(--picton-blue20);
+  text-transform: capitalize;
+}
+
+.pricing-content li:last-child {
+  border-bottom: 1px solid var(--picton-blue20);
+}
+
+.btn {
+  color: var(--white);
+  border-radius: 5px;
+  padding: 8px 25px;
+  cursor: pointer;
+  font-family: var(--be-vietnam-pro);
+  font-weight: 500;
+  letter-spacing: 0.7px;
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Primary button styles */
+.primary {
+  background-color: var(--blue-cola); /* Example primary color */
+  color: white;
+}
+
+/* Secondary button styles */
+.secondary {
+  color: white;
+  border: 1.5px solid var(--white);
+}
+
+/* Hover animation for both buttons */
+.btn:hover,
+.pricing-card:hover {
+  transform: scale(1.05); /* Slight scale-up effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Optional: Active state for click feedback */
+.btn:active {
+  transform: scale(0.95); /* Slight shrink on click */
+}
