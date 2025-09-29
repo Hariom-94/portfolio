@@ -11,7 +11,7 @@ const PricingSection = () => {
         description="Explore our flexible pricing options tailored to meet your video editing needs. From one-time projects to ongoing collaborations, we offer transparent and competitive rates to deliver high-quality results. Choose a package that fits your vision, "
       />
 
-      <div className="pricing-container grid grid-cols-1 md:grid-cols-3 justify-center md:mt-10">
+      <div className="pricing-container grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-0 justify-center md:mt-10">
         {pricingPlans.map((p) => {
           return <PricingCard {...p} key={p.name} />;
         })}
