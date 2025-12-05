@@ -2,6 +2,7 @@ import { BsPatchCheckFill } from "react-icons/bs";
 import "./PricingSection.css";
 
 const PricingCard = ({
+  id,
   name,
   savePercentage,
   originalPrice,
