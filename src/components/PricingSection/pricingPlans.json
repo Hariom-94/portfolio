@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "name": "Silver",
     "savePercentage": 25,
     "originalPrice": 3200,
@@ -20,6 +21,7 @@
     "message": "Hi there, I'd like to inquire about the *Silver Plan* for video editing (₹2400/project). I have a short video in mind. _How can we get started? *Thanks!*_ "
   },
   {
+    "id": 2,
     "name": "Gold",
     "savePercentage": 25,
     "originalPrice": 7500,
@@ -40,6 +42,7 @@
     "message": "Hello! I'm interested in your *Gold Plan* for video editing. It looks like the right fit for my project. _*Can we discuss the details?*_"
   },
   {
+    "id": 3,
     "name": "Platinum",
     "savePercentage": 25,
     "originalPrice": 16000,
