@@ -24,7 +24,7 @@ const projectTypes = [
 const labelClass = 'block font-mono text-[11px] text-ink-faint mb-1';
 
 const inputClass =
-  'w-full bg-transparent border-0 border-b border-line px-0 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-amber focus:ring-0 outline-none transition-colors';
+  'w-full bg-transparent border-0 border-b border-line px-0 py-2.5 text-base sm:text-sm text-ink placeholder:text-ink-faint focus:border-amber focus:ring-0 outline-none transition-colors';
 
 export default function Contact() {
   const formRef = useRef(null);

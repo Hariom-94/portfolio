@@ -39,8 +39,8 @@ export default function FeaturedReel() {
           sound mix decide whether someone watches to minute twenty.
         </p>
 
-        <div className="mt-12 grid lg:grid-cols-[1.4fr_1fr] gap-px bg-line border border-line">
-          <div ref={wrapRef} className="bg-bg p-4 md:p-6">
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-px bg-line border border-line">
+          <div ref={wrapRef} className="bg-bg p-4 md:p-6 min-w-0">
             <MuxPlayer
               ref={playerRef}
               key={reel.id}
@@ -53,11 +53,11 @@ export default function FeaturedReel() {
               primaryColor="#ECE9E2"
               secondaryColor="#0E1113"
               accentColor="#E8A33D"
-              className="w-full"
+              className="block w-full max-w-full"
             />
 
             <div className="mt-5 flex items-start justify-between gap-4">
-              <div>
+              <div className="min-w-0">
                 <div className="font-display text-2xl text-ink leading-tight">
                   {reel.title}
                 </div>
@@ -73,12 +73,12 @@ export default function FeaturedReel() {
             <p className="mt-3 text-sm text-ink-faint">Edit: {reel.role}</p>
           </div>
 
-          <div className="bg-bg flex flex-col divide-y divide-line-soft">
+          <div className="bg-bg flex flex-col divide-y divide-line-soft min-w-0">
             {featuredReels.map((r, i) => (
               <button
                 key={r.id}
                 onClick={() => setActive(i)}
-                className={`text-left p-4 md:p-5 flex items-center gap-4 transition-colors ${
+                className={`group text-left p-4 md:p-5 flex items-center gap-4 transition-colors ${
                   i === active ? 'bg-raised' : 'hover:bg-panel'
                 }`}
               >

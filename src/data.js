@@ -126,7 +126,7 @@ export const featuredReels = [
     views: '3.1M views',
     playbackId: '00WGqwBkF7wjcmC57Jaix8XrvKRGEuinQHT01GzYyQ02mI',
     aspectRatio: '16/9',
-    thumbTime: 36, // 31 || 36
+    thumbTime: 3, // 31 || 36
     role: 'Documentary',
   },
   {
