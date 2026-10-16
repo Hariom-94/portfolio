@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Charm:wght@400;700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* Colors */
+  --black: #000000;
+
+  --white: #ffffff;
+  --white10: #ffffff10;
+  --white20: #ffffff20;
+  --white30: #ffffff30;
+  --white70: #ffffff70;
+
+  --blue-cola: #008ce9;
+
+  --azure: #008ff9;
+  --azure10: #008ff910;
+  --azure15: #008ff915;
+  --azure40: #008ff940;
+
+  --picton-blue: #4cc9fe;
+  --picton-blue60: #4cc9fe60;
+  --picton-blue50: #4cc9fe50;
+  --picton-blue20: #4cc9fe20;
+
+  /* Fonts */
+  --be-vietnam-pro: "Be Vietnam Pro", sans-serif;
+  --charm: "Charm", cursive;
+  --work-sans: "Work Sans", sans-serif;
+}
+
+.featured-projects h3 {
+  color: var(--white);
+  text-transform: uppercase;
+  font-weight: 200;
+  letter-spacing: 10px;
+}
+
+.long-video-player {
+  border: 1px solid var(--white30);
+  background-color: var(--azure15);
+}
+
+.long-video-player .tag {
+  color: var(--picton-blue);
+  background-color: var(--picton-blue20);
+  border: 1px solid var(--picton-blue50);
+}
+
+.long-video-player p {
+  font-family: var(--be-vietnam-pro);
+  font-weight: 300;
+}
+
+.poster {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+}
+
+.play-btn,
+.pause-btn {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+mux-player::part(poster) {
+  object-fit: cover; /* Ensures thumbnail fills 9:16 */
+}
