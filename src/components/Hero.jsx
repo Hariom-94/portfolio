@@ -102,10 +102,18 @@ export default function Hero() {
             <span className="text-amber font-glitch font-normal">millions</span>{' '}
             of people watching to the last frame.
           </h1>
-          <p className="mt-8 max-w-xl text-ink-dim text-base md:text-lg leading-relaxed">
-            I cut long-form YouTube video for creators who need every minute to
-            earn its retention — story structure, pacing, sound design and
-            color, from raw footage to publish-ready file.
+          <p className="mt-8 max-w-[37rem] text-ink-dim text-base md:text-lg leading-relaxed">
+            Hi, I'm <span className="text-amber font-cursive">Hariom</span>, a
+            passionate video editor with{' '}
+            <span className="text-amber font-cursive">2+ years</span> of
+            experience transforming raw footage into{' '}
+            <span className="text-amber font-cursive">stunning</span>,{' '}
+            <span className="text-amber font-cursive">cinematic</span>,
+            <span className="text-amber font-cursive">impactful</span> videos
+            for brands, creators, and storytellers.{' '}
+            <span className="text-amber font-cursive underline">
+              Let's bring your ideas to life!
+            </span>
           </p>
         </motion.div>
 

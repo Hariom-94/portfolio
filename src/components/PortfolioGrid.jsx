@@ -109,8 +109,14 @@ export default function PortfolioGrid() {
                     {item.client}
                   </span>
                   <span className="flex items-center gap-1 font-mono text-[11px] text-teal tabular-nums shrink-0">
-                    <Eye size={12} className="opacity-70" />
-                    {item.views}
+                    {item.views ? (
+                      <>
+                        <Eye size={12} className="opacity-70" />
+                        {item.views}
+                      </>
+                    ) : (
+                      'Self Practice'
+                    )}
                   </span>
                 </div>
               </div>

@@ -165,11 +165,11 @@ export const portfolioItems = [
     handle: '',
     category: 'Long-form',
     duration: '01:12',
-    views: '3.1M views',
+    // views: '3.1M views',
     playbackId: '00WGqwBkF7wjcmC57Jaix8XrvKRGEuinQHT01GzYyQ02mI',
     thumbTime: 3,
     aspectRatio: '16/9',
-    thumbTime: 36, // 31 || 36
+    // thumbTime: 36, // 31 || 36
   },
   {
     id: 'p2',
@@ -179,7 +179,7 @@ export const portfolioItems = [
     client: '',
     category: 'Long-form',
     duration: '01:50',
-    views: '2.6M views',
+    // views: '2.6M views',
     playbackId: 'KpD00XW02yKVHHUAV966qaReCETIr2dJMId02Eg7izSgz00',
     aspectRatio: '16/9',
     thumbTime: 56,
@@ -202,11 +202,11 @@ export const portfolioItems = [
     handle: '',
     client: '',
     category: 'Shorts',
-    duration: '12:40',
-    views: '1.8M views',
+    duration: '00:25',
+    // views: '1.8M views',
     playbackId: 'TbBrc2IYoJ54Vla3ePlLqPw2EKfifUqT37n01apxnkXQ',
     aspectRatio: '9/16',
-    thumbTime: 4,
+    thumbTime: 2,
   },
   {
     id: 'p5',
@@ -214,19 +214,12 @@ export const portfolioItems = [
     client: '',
     handle: '',
     category: 'Shorts',
-    duration: '15:20',
-    views: '2.4M views',
+    duration: '00:50',
+    // views: '2.4M views',
     playbackId: 'm3L2HIK4SxNdl00q1eggbzVnz4CaOkOaTo5y3EQ76ju8',
-    thumbTime: 6,
+    thumbTime: 41,
     aspectRatio: '9/16',
-    thumbTime: 2,
   },
 ];
 
-export const categories = [
-  'Long-form',
-  'Shorts',
-  'Brand',
-  'Music video',
-  'Documentary',
-];
+export const categories = ['Long-form', 'Shorts', 'Brand'];

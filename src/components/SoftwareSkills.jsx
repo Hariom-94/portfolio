@@ -12,7 +12,7 @@ export default function SoftwareSkills() {
           <div>
             <SectionHeading tag="V2" title="Tools &amp; software" />
             <p className="mt-3 md:mt-4 max-w-lg text-ink-dim text-sm md:text-base">
-              What the edit actually runs through, day to day.
+              Tools I use most
             </p>
           </div>
         </div>

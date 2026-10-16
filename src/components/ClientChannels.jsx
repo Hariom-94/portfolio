@@ -5,10 +5,7 @@ export default function ClientChannels() {
     <section id="clients" className="border-b border-line py-20 md:py-28">
       <div className="mx-auto max-w-[1400px] px-4 md:px-8">
         <SectionHeading tag="V3" title="Channels I cut for" />
-        <p className="mt-4 max-w-lg text-ink-dim">
-          Eight creators, eight formats. Every one of them ships on a weekly
-          upload schedule I edit around.
-        </p>
+        <p className="mt-4 max-w-lg text-ink-dim">The Channels I Work With</p>
 
         {/* Replaced the solid background container block with a clean flex rail
             so sparse items never display awkward empty gray background areas */}

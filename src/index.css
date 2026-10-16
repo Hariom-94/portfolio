@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Rubik+Glitch&display=swap&family=Bruno+Ace+SC&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Chilanka&family=Rubik+Glitch&display=swap&family=Bruno+Ace+SC&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -14,6 +14,7 @@
   --color-teal: #3fc9b6;
 
   --font-display: "Big Shoulders Display", "Big Shoulders", sans-serif;
+  --font-cursive: "Chilanka", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
   --font-glitch: "Rubik Glitch", sans-serif;

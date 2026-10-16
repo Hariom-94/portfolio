@@ -3,6 +3,10 @@ import MuxPlayer from '@mux/mux-player-react';
 import { featuredReels } from '../data.js';
 import { SectionHeading } from './ClientChannels.jsx';
 
+const thumbUrl = (r) =>
+  r.thumbnail ??
+  `https://image.mux.com/${r.playbackId}/thumbnail.jpg?width=320&height=180&fit_mode=smartcrop&time=${r.thumbTime ?? 5}`;
+
 export default function FeaturedReel() {
   const [active, setActive] = useState(0);
   const reel = featuredReels[active];
@@ -74,27 +78,48 @@ export default function FeaturedReel() {
               <button
                 key={r.id}
                 onClick={() => setActive(i)}
-                className={`text-left p-5 md:p-6 flex items-center gap-4 transition-colors ${
+                className={`text-left p-4 md:p-5 flex items-center gap-4 transition-colors ${
                   i === active ? 'bg-raised' : 'hover:bg-panel'
                 }`}
               >
+                {/* Thumbnail */}
                 <span
-                  className={`font-mono text-xs w-6 shrink-0 ${i === active ? 'text-amber' : 'text-ink-faint'}`}
+                  className={`relative block w-28 md:w-36 shrink-0 aspect-video overflow-hidden border ${
+                    i === active ? 'border-amber' : 'border-line'
+                  }`}
                 >
-                  {String(i + 1).padStart(2, '0')}
+                  <img
+                    src={thumbUrl(r)}
+                    alt=""
+                    loading="lazy"
+                    className={`h-full w-full object-cover transition-opacity ${
+                      i === active
+                        ? 'opacity-100'
+                        : 'opacity-70 group-hover:opacity-100'
+                    }`}
+                  />
+                  <span className="absolute left-1.5 top-1.5 bg-bg/80 px-1.5 py-0.5 font-mono text-[10px] text-ink-faint">
+                    <span className={i === active ? 'text-amber' : ''}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                  </span>
+                  <span className="absolute bottom-1.5 right-1.5 bg-bg/80 px-1.5 py-0.5 font-mono text-[10px] text-ink tabular-nums">
+                    {r.duration}
+                  </span>
                 </span>
+
+                {/* Text */}
                 <span className="flex-1 min-w-0">
                   <span
-                    className={`block truncate font-display text-lg leading-tight ${i === active ? 'text-ink' : 'text-ink-dim'}`}
+                    className={`block truncate font-display text-lg leading-tight ${
+                      i === active ? 'text-ink' : 'text-ink-dim'
+                    }`}
                   >
                     {r.title}
                   </span>
                   <span className="block text-xs text-ink-faint mt-0.5">
                     {r?.client !== '' ? r.client + ' /' : ''} {r.views}
                   </span>
-                </span>
-                <span className="font-mono text-[11px] text-ink-faint tabular-nums shrink-0">
-                  {r.duration}
                 </span>
               </button>
             ))}
