@@ -13,7 +13,6 @@ const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
 const projectTypes = [
   'Long-form YouTube',
   'Shorts / clips',
-  'Brand film',
   'Documentary',
   'Something else',
 ];

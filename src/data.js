@@ -107,35 +107,62 @@ export const TOTAL_VIEWS = clientChannels.reduce((sum, c) => sum + c.views, 0);
 export const featuredReels = [
   {
     id: 'p1',
+    title: 'Sonia Gandhi',
+    client: 'Shyam Meera Singh',
+    category: 'Long-form',
+    duration: '05:03',
+    views: '1.1M views',
+    playbackId: '8HW8DqAtAJJsefVEuz7CxDaR02TukSm6VitP02lRFIP6M',
+    aspectRatio: '16/9',
+    thumbTime: 122, // 31 || 36
+    role: 'Documentary',
+  },
+  {
+    id: 'p1',
     title: 'The White House: An AI-Enhanced Edit',
-    client: 'Fernweg Travel',
+    client: '',
     category: 'Long-form',
     duration: '01:12',
     views: '3.1M views',
     playbackId: '00WGqwBkF7wjcmC57Jaix8XrvKRGEuinQHT01GzYyQ02mI',
-    thumbTime: 3,
     aspectRatio: '16/9',
     thumbTime: 36, // 31 || 36
+    role: 'Documentary',
   },
   {
     id: 'p2',
     title: 'The Forest King: A Modern Robin Hood',
-    client: 'Northbound Tech',
+    client: '',
     category: 'Long-form',
     duration: '01:50',
     views: '2.6M views',
     playbackId: 'KpD00XW02yKVHHUAV966qaReCETIr2dJMId02Eg7izSgz00',
     aspectRatio: '16/9',
     thumbTime: 56,
+    role: 'Documentary',
   },
 ];
 
 // Only 10 portfolio items (real + realistic)
 export const portfolioItems = [
   {
+    id: 'p0',
+    title: 'Sonia Gandhi',
+    client: 'Shyam Meera Singh',
+    handle: '@shyammeerasingh1',
+    category: 'Long-form',
+    duration: '05:03',
+    views: '1.1M views',
+    playbackId: '8HW8DqAtAJJsefVEuz7CxDaR02TukSm6VitP02lRFIP6M',
+    aspectRatio: '16/9',
+    thumbTime: 122, // 31 || 36
+    role: 'Documentary',
+  },
+  {
     id: 'p1',
     title: 'The White House: An AI-Enhanced Edit',
-    client: 'Fernweg Travel',
+    client: '',
+    handle: '',
     category: 'Long-form',
     duration: '01:12',
     views: '3.1M views',
@@ -147,7 +174,9 @@ export const portfolioItems = [
   {
     id: 'p2',
     title: 'The Forest King: A Modern Robin Hood',
-    client: 'Northbound Tech',
+    handle: '',
+    clientChannel: '',
+    client: '',
     category: 'Long-form',
     duration: '01:50',
     views: '2.6M views',
@@ -159,6 +188,7 @@ export const portfolioItems = [
     id: 'p3',
     title: 'Road Accident',
     client: 'Shyam Meera Singh',
+    handle: '@shyammeerasingh1',
     category: 'Long-form',
     duration: '03:39',
     views: '2.6M views',
@@ -169,7 +199,8 @@ export const portfolioItems = [
   {
     id: 'p4',
     title: 'Truth Behind Amazon Logo',
-    client: 'Strike',
+    handle: '',
+    client: '',
     category: 'Shorts',
     duration: '12:40',
     views: '1.8M views',
@@ -180,7 +211,8 @@ export const portfolioItems = [
   {
     id: 'p5',
     title: 'Nepal GenZ Protest',
-    client: 'Shyam Meera Singh',
+    client: '',
+    handle: '',
     category: 'Shorts',
     duration: '15:20',
     views: '2.4M views',

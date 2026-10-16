@@ -149,8 +149,18 @@ function PlayerModal({ item, onClose }) {
               {item.title}
             </div>
             <div className="text-xs font-mono text-ink-faint mt-1 flex items-center gap-2">
-              <span className="text-amber">{item.client}</span>
-              <span>•</span>
+              {item?.client && (
+                <>
+                  <a
+                    href={`https://www.youtube.com/${item?.handle}`}
+                    target="_blank"
+                    className="text-amber"
+                  >
+                    {item?.client}
+                  </a>
+                  <span>•</span>
+                </>
+              )}
               <span>{item.category}</span>
               <span>•</span>
               <span className="text-teal">{item.views}</span>

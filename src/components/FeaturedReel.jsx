@@ -58,16 +58,15 @@ export default function FeaturedReel() {
                   {reel.title}
                 </div>
                 <div className="mt-1 text-sm text-ink-dim">
-                  {reel.client} / {reel.category}
+                  {reel?.client !== '' ? reel.client + ' /' : ''}{' '}
+                  {reel.category}
                 </div>
               </div>
               <span className="font-mono text-xs text-ink-faint border border-line px-2 py-1 shrink-0 tabular-nums">
                 {reel.duration}
               </span>
             </div>
-            <p className="mt-3 text-sm text-ink-faint">
-              Edit role: {reel.role}
-            </p>
+            <p className="mt-3 text-sm text-ink-faint">Edit: {reel.role}</p>
           </div>
 
           <div className="bg-bg flex flex-col divide-y divide-line-soft">
@@ -91,7 +90,7 @@ export default function FeaturedReel() {
                     {r.title}
                   </span>
                   <span className="block text-xs text-ink-faint mt-0.5">
-                    {r.client} / {r.views}
+                    {r?.client !== '' ? r.client + ' /' : ''} {r.views}
                   </span>
                 </span>
                 <span className="font-mono text-[11px] text-ink-faint tabular-nums shrink-0">
