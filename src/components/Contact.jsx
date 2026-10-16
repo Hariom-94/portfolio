@@ -21,10 +21,10 @@ const projectTypes = [
   'Something else',
 ];
 
-const labelClass = 'block font-mono text-[11px] text-ink-faint mb-1';
+const labelClass = 'block font-mono text-[14px] text-ink-faint mb-1';
 
 const inputClass =
-  'w-full bg-transparent border-0 border-b border-line px-0 py-2.5 text-base sm:text-sm text-ink placeholder:text-ink-faint focus:border-amber focus:ring-0 outline-none transition-colors';
+  'w-full min-w-0 rounded-md border border-line bg-bg px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-all duration-200 focus:border-amber focus:ring-1 focus:ring-amber/30';
 
 export default function Contact() {
   const formRef = useRef(null);
@@ -105,7 +105,7 @@ export default function Contact() {
                 name="project_type"
                 required
                 defaultValue=""
-                className={`${inputClass} [&>option]:bg-panel`}
+                className={`${inputClass} [&>option]:bg-panel [&>option]:text-ink`}
               >
                 <option value="" disabled>
                   Select one
@@ -135,7 +135,7 @@ export default function Contact() {
                 required
                 rows={3}
                 placeholder="Upload frequency, footage length, style references…"
-                className={`${inputClass} resize-none`}
+                className={`${inputClass} min-h-28 resize-y`}
               />
             </div>
 
@@ -178,7 +178,7 @@ export default function Contact() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-2 font-mono text-xs px-5 py-3 border border-line text-ink hover:border-teal hover:text-teal transition-colors"
+                  className="group inline-flex items-center justify-center gap-2 rounded-md border border-teal bg-teal text-bg px-5 py-3 font-mono text-xs transition-colors hover:bg-transparent hover:text-teal sm:bg-transparent sm:text-teal"
                 >
                   Chat on WhatsApp
                   <span
@@ -214,6 +214,7 @@ function Field({ label, ...props }) {
 const FPS = 24;
 const LOOP_SECONDS = 20;
 const TOTAL_FRAMES = FPS * LOOP_SECONDS;
+const GLITCH_BURST_FRAMES = 10;
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -224,6 +225,12 @@ function timecode(frame) {
   return `00:${pad(m)}:${pad(s)}:${pad(f)}`;
 }
 
+// Deterministic pseudo-random (0–1) so the same frame always looks the same
+function rand(n) {
+  const x = Math.sin(n * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 // Fixed pseudo-waveform so it doesn't change between renders
 const waveform = Array.from({ length: 64 }, (_, i) =>
   Math.round(18 + Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.4)) * 72),
@@ -231,19 +238,101 @@ const waveform = Array.from({ length: 64 }, (_, i) =>
 
 // Widths are percentages and should add up to 100
 const videoClips = [
-  { w: 28, label: 'intro' },
-  { w: 34, label: 'b-roll' },
-  { w: 38, label: 'main' },
+  { w: 28, label: 'intro', fx: 'GLITCH' },
+  { w: 34, label: 'b-roll', fx: 'WARM GRADE' },
+  { w: 38, label: 'main', fx: 'CLEAN' },
 ];
+
+// Cumulative end of each clip, in percent: [28, 62, 100]
+const clipEnds = videoClips.reduce((acc, c) => {
+  acc.push((acc[acc.length - 1] ?? 0) + c.w);
+  return acc;
+}, []);
+
+// Frames where a cut happens (including the loop start)
+const cutFrames = [
+  0,
+  ...clipEnds.slice(0, -1).map((p) => Math.round((p / 100) * TOTAL_FRAMES)),
+];
+
+function getFx(frame, scrubbing, reduce) {
+  const progress = (frame / TOTAL_FRAMES) * 100;
+  let clipIdx = clipEnds.findIndex((end) => progress < end);
+  if (clipIdx === -1) clipIdx = videoClips.length - 1;
+
+  const start = clipIdx === 0 ? 0 : clipEnds[clipIdx - 1];
+  const t = (progress - start) / videoClips[clipIdx].w; // 0–1 inside the clip
+
+  // Per-clip look
+  let filter;
+  let scale;
+  if (clipIdx === 0) {
+    filter = `grayscale(${0.9 - 0.5 * t}) contrast(1.25) brightness(${0.85 + 0.15 * t})`;
+    scale = 1 + 0.04 * t;
+  } else if (clipIdx === 1) {
+    filter = 'sepia(0.45) saturate(1.35) hue-rotate(-12deg) contrast(1.1)';
+    scale = 1.12 - 0.06 * t;
+  } else {
+    filter = 'saturate(1.05) contrast(1.02)';
+    scale = 1 + 0.08 * t;
+  }
+
+  // Glitch intensity (0–1)
+  let intensity = 0;
+  if (!reduce) {
+    for (const c of cutFrames) {
+      const d = frame - c;
+      if (d >= 0 && d < GLITCH_BURST_FRAMES) {
+        intensity = Math.max(intensity, 1 - d / GLITCH_BURST_FRAMES);
+      }
+    }
+    // Random bursts during the intro clip
+    if (clipIdx === 0 && rand(Math.floor(frame / 5)) > 0.85) {
+      intensity = Math.max(intensity, 0.6);
+    }
+    if (scrubbing) intensity = Math.max(intensity, 0.35);
+  }
+
+  return { clipIdx, filter, scale, intensity };
+}
+
+// Red / cyan channel ghost used for the RGB-split look
+function Ghost({ color, dx }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0"
+      style={{
+        background: color,
+        mixBlendMode: 'screen',
+        isolation: 'isolate',
+        opacity: 0.85,
+        transform: `translateX(${dx}px)`,
+      }}
+    >
+      <img
+        src="/profile.png"
+        alt=""
+        className="h-full w-full object-cover object-center"
+        style={{ mixBlendMode: 'multiply' }}
+      />
+    </div>
+  );
+}
 
 function EditorFrame() {
   const [frame, setFrame] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const [scrubbing, setScrubbing] = useState(false);
+  const wasPlaying = useRef(false);
+
+  const [reduce] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
 
   useEffect(() => {
-    const reduce = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
     if (!playing || reduce) return;
 
     const id = setInterval(
@@ -251,9 +340,69 @@ function EditorFrame() {
       1000 / FPS,
     );
     return () => clearInterval(id);
-  }, [playing]);
+  }, [playing, reduce]);
 
   const progress = (frame / TOTAL_FRAMES) * 100;
+  const { clipIdx, filter, scale, intensity } = getFx(frame, scrubbing, reduce);
+  const clip = videoClips[clipIdx];
+
+  // Glitch pieces for this frame
+  const shift = intensity * 8;
+  const slices =
+    intensity > 0
+      ? Array.from({ length: 3 }, (_, i) => {
+          const top = rand(frame * 3 + i) * 80;
+          const h = 4 + rand(frame * 7 + i) * 14;
+          return {
+            top,
+            bottom: Math.max(0, 100 - top - h),
+            dx: (rand(frame * 5 + i) - 0.5) * 60 * intensity,
+          };
+        })
+      : [];
+
+  // --- Scrubbing ----------------------------------------------------------
+  function frameFromPointer(e) {
+    const r = e.currentTarget.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    return Math.min(TOTAL_FRAMES - 1, Math.round(ratio * TOTAL_FRAMES));
+  }
+
+  function handlePointerDown(e) {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    wasPlaying.current = playing;
+    setPlaying(false);
+    setScrubbing(true);
+    setFrame(frameFromPointer(e));
+  }
+
+  function handlePointerMove(e) {
+    if (!scrubbing) return;
+    setFrame(frameFromPointer(e));
+  }
+
+  function endScrub() {
+    if (!scrubbing) return;
+    setScrubbing(false);
+    if (wasPlaying.current) setPlaying(true);
+  }
+
+  function handleKeyDown(e) {
+    const step = e.shiftKey ? FPS : 1;
+    if (e.key === 'ArrowRight') {
+      setFrame((f) => Math.min(TOTAL_FRAMES - 1, f + step));
+    } else if (e.key === 'ArrowLeft') {
+      setFrame((f) => Math.max(0, f - step));
+    } else if (e.key === 'Home') {
+      setFrame(0);
+    } else if (e.key === 'End') {
+      setFrame(TOTAL_FRAMES - 1);
+    } else {
+      return;
+    }
+    e.preventDefault();
+    setPlaying(false);
+  }
 
   return (
     <div className="border border-amber/60 bg-panel">
@@ -265,7 +414,7 @@ function EditorFrame() {
               playing ? 'animate-pulse' : ''
             }`}
           />
-          {playing ? 'PLAY' : 'PAUSE'}
+          {scrubbing ? 'SCRUB' : playing ? 'PLAY' : 'PAUSE'}
         </span>
         <span>profile.mov</span>
         <span>{FPS} fps</span>
@@ -273,11 +422,47 @@ function EditorFrame() {
 
       {/* Program monitor */}
       <div className="relative aspect-[16/9] sm:aspect-[4/5] max-h-[460px] w-full overflow-hidden bg-bg">
-        <img
-          src="/profile.png"
-          alt="Hariom Kumar — Video Editor"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-          loading="lazy"
+        {/* Stage: grade + zoom apply to every layer inside */}
+        <div
+          className="absolute inset-0"
+          style={{ filter, transform: `scale(${scale})` }}
+        >
+          <img
+            src="/profile.png"
+            alt="Hariom Kumar — Video Editor"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            loading="lazy"
+          />
+
+          {intensity > 0 && (
+            <>
+              <Ghost color="#ff0000" dx={shift} />
+              <Ghost color="#00ffff" dx={-shift} />
+              {slices.map((s, i) => (
+                <img
+                  key={i}
+                  src="/profile.png"
+                  alt=""
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+                  style={{
+                    clipPath: `inset(${s.top}% 0 ${s.bottom}% 0)`,
+                    transform: `translateX(${s.dx}px)`,
+                  }}
+                />
+              ))}
+            </>
+          )}
+        </div>
+
+        {/* Scanlines */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{
+            background:
+              'repeating-linear-gradient(0deg, rgba(0,0,0,0.6) 0px, rgba(0,0,0,0.6) 1px, transparent 1px, transparent 3px)',
+          }}
         />
 
         {/* Safe-area guide */}
@@ -312,6 +497,11 @@ function EditorFrame() {
           aria-hidden="true"
           className="absolute bottom-3 right-3 h-3 w-3 border-b border-r border-amber"
         />
+
+        {/* Active clip + effect label */}
+        <span className="absolute left-8 top-2.5 bg-bg/70 px-2 py-0.5 font-mono text-[10px] text-amber">
+          {clip.label.toUpperCase()} · {clip.fx}
+        </span>
 
         {/* Timecode overlay */}
         <span className="absolute bottom-5 left-5 bg-bg/70 px-2 py-1 font-mono text-[11px] text-amber tabular-nums">
@@ -373,11 +563,13 @@ function EditorFrame() {
           <div className="flex items-center gap-2">
             <span className="w-5 font-mono text-[9px] text-ink-faint">V1</span>
             <div className="flex h-7 flex-1 gap-px">
-              {videoClips.map((c) => (
+              {videoClips.map((c, i) => (
                 <div
                   key={c.label}
                   style={{ width: `${c.w}%` }}
-                  className="truncate border border-amber/50 bg-amber/15 px-1.5 font-mono text-[9px] leading-7 text-amber"
+                  className={`truncate border border-amber/50 px-1.5 font-mono text-[9px] leading-7 text-amber transition-colors ${
+                    i === clipIdx ? 'bg-amber/30' : 'bg-amber/10'
+                  }`}
                 >
                   {c.label}
                 </div>
@@ -399,7 +591,7 @@ function EditorFrame() {
             </div>
           </div>
 
-          {/* Playhead — container lines up with the track area */}
+          {/* Playhead */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-y-0 left-7 right-0"
@@ -412,7 +604,28 @@ function EditorFrame() {
               <span className="block h-full w-px bg-amber" />
             </div>
           </div>
+
+          {/* Scrub area: drag anywhere on the timeline */}
+          <div
+            role="slider"
+            tabIndex={0}
+            aria-label="Timeline playhead"
+            aria-valuemin={0}
+            aria-valuemax={TOTAL_FRAMES - 1}
+            aria-valuenow={frame}
+            aria-valuetext={timecode(frame)}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={endScrub}
+            onPointerCancel={endScrub}
+            onKeyDown={handleKeyDown}
+            className="absolute inset-y-0 left-7 right-0 cursor-ew-resize touch-pan-y outline-none focus-visible:ring-1 focus-visible:ring-amber/60"
+          />
         </div>
+
+        <p className="mt-3 pl-7 font-mono text-[9px] text-ink-faint">
+          Drag the timeline to scrub
+        </p>
       </div>
     </div>
   );
