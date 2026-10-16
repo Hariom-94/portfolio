@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Rubik+Glitch&display=swap&family=Bruno+Ace+SC&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0e1113;
+  --color-panel: #15191c;
+  --color-raised: #1b2023;
+  --color-line: #262b2f;
+  --color-line-soft: #1e2326;
+  --color-ink: #ece9e2;
+  --color-ink-dim: #9ba0a3;
+  --color-ink-faint: #5c6265;
+  --color-amber: #e8a33d;
+  --color-teal: #3fc9b6;
+
+  --font-display: "Big Shoulders Display", "Big Shoulders", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-glitch: "Rubik Glitch", sans-serif;
+  --font-scroll: "Bruno Ace SC", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-amber);
+  color: #0e1113;
+}
+
+/* thin custom scrollbar for horizontal rails */
+.rail::-webkit-scrollbar {
+  height: 6px;
+}
+.rail::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 3px;
+}
+.rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 2px;
+}
+
+mux-player {
+  --media-object-fit: cover;
+  --controls: initial;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #000;
+}
