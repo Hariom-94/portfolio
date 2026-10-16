@@ -272,7 +272,7 @@ function EditorFrame() {
       </div>
 
       {/* Program monitor */}
-      <div className="relative aspect-[4/5] max-h-[460px] w-full overflow-hidden bg-bg">
+      <div className="relative aspect-[16/9] sm:aspect-[4/5] max-h-[460px] w-full overflow-hidden bg-bg">
         <img
           src="/profile.png"
           alt="Hariom Kumar — Video Editor"
