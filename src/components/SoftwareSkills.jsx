@@ -10,7 +10,7 @@ export default function SoftwareSkills() {
       <div className="mx-auto max-w-[1400px] px-4 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-8 md:mb-12">
           <div>
-            <SectionHeading tag="V6" title="Tools &amp; software" />
+            <SectionHeading tag="V2" title="Tools &amp; software" />
             <p className="mt-3 md:mt-4 max-w-lg text-ink-dim text-sm md:text-base">
               What the edit actually runs through, day to day.
             </p>

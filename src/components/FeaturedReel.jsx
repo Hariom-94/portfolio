@@ -29,7 +29,7 @@ export default function FeaturedReel() {
   return (
     <section id="reel" className="border-b border-line py-20 md:py-28">
       <div className="mx-auto max-w-[1400px] px-4 md:px-8">
-        <SectionHeading tag="V3" title="Four long-form edits" />
+        <SectionHeading tag="V4" title="Four long-form edits" />
         <p className="mt-4 max-w-lg text-ink-dim">
           The full-length pieces — the ones where structure, pacing and a clean
           sound mix decide whether someone watches to minute twenty.

@@ -27,7 +27,7 @@ export default function PortfolioGrid() {
       <div className="mx-auto max-w-[1400px] px-4 md:px-8 relative z-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <SectionHeading tag="V5" title="The full cut list" />
+            <SectionHeading tag="V6" title="The full cut list" />
             <p className="mt-4 max-w-lg text-ink-dim text-sm md:text-base">
               {portfolioItems.length}+ cinematic edits across five distinct
               formats. Filter by type or explore the complete curated reel.

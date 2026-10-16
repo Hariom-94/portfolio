@@ -29,7 +29,7 @@ export default function ColorGradeCompare({
   return (
     <section id="grade" className="border-b border-line py-20 md:py-28">
       <div className="mx-auto max-w-[1400px] px-4 md:px-8">
-        <SectionHeading tag="V4" title="Before / after the grade" />
+        <SectionHeading tag="V5" title="Before / after the grade" />
         <p className="mt-4 max-w-lg text-ink-dim">
           Drag the divider to see what a pass of color correction and grading
           does to a flat, unedited clip — in widescreen and in vertical Shorts.
