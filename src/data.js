@@ -106,8 +106,8 @@ export const TOTAL_VIEWS = clientChannels.reduce((sum, c) => sum + c.views, 0);
 // Flagship long-form pieces
 export const featuredReels = [
   {
-    id: 'p1',
-    title: 'Sonia Gandhi',
+    id: 'p0',
+    title: 'Sonia Gandhi: This Video Will Change Your Mind',
     client: 'Shyam Meera Singh',
     category: 'Long-form',
     duration: '05:03',
@@ -141,13 +141,25 @@ export const featuredReels = [
     thumbTime: 56,
     role: 'Documentary',
   },
+  {
+    id: 'p3',
+    title: "Something's wrong here!",
+    client: 'Shyam Meera Singh',
+    handle: '@shyammeerasingh1',
+    category: 'Long-form',
+    duration: '03:39',
+    views: '2.6M views',
+    playbackId: '5JgcC02KlNbOwj7TiakccKZlURGwRHEG41pxvt9ev02wA',
+    aspectRatio: '16/9',
+    thumbTime: 56,
+  },
 ];
 
 // Only 10 portfolio items (real + realistic)
 export const portfolioItems = [
   {
     id: 'p0',
-    title: 'Sonia Gandhi',
+    title: 'Sonia Gandhi: This Video Will Change Your Mind',
     client: 'Shyam Meera Singh',
     handle: '@shyammeerasingh1',
     category: 'Long-form',
@@ -186,7 +198,7 @@ export const portfolioItems = [
   },
   {
     id: 'p3',
-    title: 'Road Accident',
+    title: "Something's wrong here!",
     client: 'Shyam Meera Singh',
     handle: '@shyammeerasingh1',
     category: 'Long-form',

@@ -13,9 +13,6 @@ export default function Footer() {
           >
             Whatsapp
           </a>
-          <a href="#" className="hover:text-amber transition-colors">
-            YouTube
-          </a>
           <a
             href="https://www.instagram.com/harii_0m_"
             target="_blank"
@@ -24,11 +21,11 @@ export default function Footer() {
             Instagram
           </a>
           <a
-            href="https://www.linkedin.com/in/hariiomkumar"
+            href="mailto:hariomkumar8988@gmail.com"
             target="_blank"
             className="hover:text-amber transition-colors"
           >
-            LinkedIn
+            Email
           </a>
         </div>
       </div>

@@ -73,12 +73,6 @@ export default function Contact() {
           {/* Left — video editor frame */}
           <div>
             <EditorFrame />
-            <a
-              href="mailto:hariomkumar8988@gmail.com"
-              className="mt-8 inline-block font-mono text-xs text-ink-faint hover:text-amber transition-colors"
-            >
-              hariomkumar8988@gmail.com
-            </a>
           </div>
 
           {/* Right — form */}
