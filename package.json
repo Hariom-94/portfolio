@@ -12,6 +12,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@mux/mux-player-react": "^3.13.3",
+    "axios": "^1.20.0",
     "framer-motion": "^13.2.0",
     "lucide-react": "^1.45.0",
     "react": "^19.2.8",

@@ -1,85 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  TOTAL_VIEWS,
-  clientChannels,
-  portfolioItems,
-  featuredReels,
-} from '../data.js';
+import { motion, AnimatePresence } from 'framer-motion';
+import { clientChannels, edited_videos } from '../data';
+import { useEditedVideoViews } from '../hooks/useEditedVideoViews';
 
-function useLiveViews(target, durationMs = 1800) {
-  const [value, setValue] = useState(0);
-  const ref = useRef(null);
-  const hasAnimated = useRef(false);
-  const liveInterval = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || hasAnimated.current) return;
-
-    const startAnimation = () => {
-      if (hasAnimated.current) return;
-      hasAnimated.current = true;
-
-      const start = performance.now();
-
-      const tick = (now) => {
-        const progress = Math.min(1, (now - start) / durationMs);
-        // Smooth ease-out cubic
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setValue(Math.round(eased * target));
-
-        if (progress < 1) {
-          requestAnimationFrame(tick);
-        } else {
-          // Animation finished → start slow continuous growth
-          liveInterval.current = setInterval(() => {
-            setValue((prev) => prev + Math.floor(Math.random() * 7) + 2); // +2 to +8 views
-          }, 2500);
-        }
-      };
-
-      requestAnimationFrame(tick);
-    };
-
-    // IntersectionObserver
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          startAnimation();
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 },
-    );
-
-    observer.observe(el);
-
-    // Fallback for cases where element is already in view on load
-    const fallbackTimer = setTimeout(() => {
-      const rect = el.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-      if (isVisible) {
-        startAnimation();
-      }
-    }, 400);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(fallbackTimer);
-      if (liveInterval.current) clearInterval(liveInterval.current);
-    };
-  }, [target, durationMs]);
-
-  return [value, ref];
-}
+const compact = new Intl.NumberFormat('en', {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+});
 
 export default function Hero() {
-  const [value, ref] = useLiveViews(TOTAL_VIEWS);
+  const {
+    totalViews: TOTAL_VIEWS,
+    totalLikes,
+    viewsById,
+    foundCount,
+  } = useEditedVideoViews();
   const [activeBar, setActiveBar] = useState(null);
-  const longForm = featuredReels.length;
-  // const totalEdits = portfolioItems.length + featuredReels.length;
-  const totalEdits = 45;
+  const totalEdits = edited_videos.length;
+
+  // Ranked lists (no extra API calls)
+  const rankedVideos = [...edited_videos].sort(
+    (a, b) => (viewsById[b.yt_id] ?? 0) - (viewsById[a.yt_id] ?? 0),
+  );
+  const rankedChannels = [...clientChannels].sort((a, b) => b.views - a.views);
+  const millionPlus = rankedVideos.filter(
+    (v) => (viewsById[v.yt_id] ?? 0) >= 1_000_000,
+  );
+
+  // Derived stats; show an em dash until the first response arrives
+  const ready = foundCount > 0;
+  const avgViews = ready ? Math.round(TOTAL_VIEWS / foundCount) : 0;
+  const topViews = ready ? Math.max(...Object.values(viewsById)) : 0;
+  const likeRate = TOTAL_VIEWS ? (totalLikes / TOTAL_VIEWS) * 100 : 0;
 
   return (
     <section
@@ -108,7 +60,7 @@ export default function Hero() {
             <span className="text-amber font-cursive">2+ years</span> of
             experience transforming raw footage into{' '}
             <span className="text-amber font-cursive">stunning</span>,{' '}
-            <span className="text-amber font-cursive">cinematic</span>,
+            <span className="text-amber font-cursive">cinematic</span>,{' '}
             <span className="text-amber font-cursive">impactful</span> videos
             for brands, creators, and storytellers.{' '}
             <span className="text-amber font-cursive underline">
@@ -117,36 +69,139 @@ export default function Hero() {
           </p>
         </motion.div>
 
+        {/* Container draws top + left borders; every Stat draws right + bottom,
+            so the grid stays fully outlined across both rows. */}
         <motion.div
-          ref={ref}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 border border-line"
+          className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 border-t border-l border-line"
         >
+          {/* Row 1 */}
           <Stat
-            value={value.toLocaleString('en-US')}
-            label="Total views across edited videos"
             big
+            value={Number(TOTAL_VIEWS).toLocaleString('en-US')}
+            label="Total views across edited videos"
+            hint="Top videos"
+            info="Combined YouTube views of only the videos I edited, fetched from YouTube. It doesn't include the channels' other videos, or videos edited by someone else."
+            popover={
+              <VideosList
+                title="Edited videos · by views"
+                videos={rankedVideos}
+                viewsById={viewsById}
+              />
+            }
           />
-          <Stat value={`${totalEdits}+`} label="Videos edited" />
-          {/* <Stat value={longForm} label="Flagship long-form pieces" />*/}
-          <Stat value={clientChannels.length} label="Creator channels" />
+          <Stat
+            value={`${totalEdits}+`}
+            label="Videos edited"
+            info="Number of videos in my portfolio that I edited. Videos published before I joined a channel, or edited by others, are not counted."
+          />
+          <Stat
+            value={clientChannels.length}
+            label="Creator channels"
+            hint="Who I've worked with"
+            popoverClass="right-0"
+            info="YouTube channels I've edited videos for. The subscriber and view numbers inside are the whole channel's totals, not just my videos."
+            popover={<ChannelsList channels={rankedChannels} />}
+          />
+
+          {/* Row 2 */}
+          <Stat
+            value={ready ? millionPlus.length : '—'}
+            label="Videos over 1M views"
+            hint={millionPlus.length ? 'See them' : undefined}
+            info="How many of the videos I edited have passed one million views on YouTube."
+            popover={
+              millionPlus.length ? (
+                <VideosList
+                  title="Videos over 1M views"
+                  videos={millionPlus}
+                  viewsById={viewsById}
+                />
+              ) : undefined
+            }
+          />
+          <Stat
+            value={ready ? compact.format(topViews) : '—'}
+            label="Views on my best video"
+            hint="Top 5 videos"
+            popoverClass="right-0 md:right-auto md:left-0"
+            info="Views on the single most-watched video I edited. Hover to see the top five."
+            popover={
+              <VideosList
+                title="Top 5 videos"
+                videos={rankedVideos.slice(0, 5)}
+                viewsById={viewsById}
+              />
+            }
+          />
+          <Stat
+            value={ready ? compact.format(avgViews) : '—'}
+            label="Average views per video"
+            info="Total views divided by the number of videos I edited. It shows typical performance, so one viral video doesn't carry the number."
+          />
+          <Stat
+            value={ready ? `${likeRate.toFixed(1)}%` : '—'}
+            label="Like rate across edits"
+            popoverClass="right-0"
+            info="Likes divided by views across the videos I edited. Videos that hide their like count are counted as zero, so the real rate may be slightly higher."
+          />
         </motion.div>
       </div>
     </section>
   );
 }
 
-function Stat({ value, label, big }) {
+/* ---------- Stat: opens an explanation (and optional list) on hover / tap / focus ---------- */
+
+function Stat({
+  value,
+  label,
+  big,
+  info,
+  hint,
+  popover,
+  popoverClass = 'left-0',
+}) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+  const interactive = Boolean(info || popover);
+
+  // Close when tapping/clicking outside (needed for touch devices)
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e) => {
+      if (rootRef.current && !rootRef.current.contains(e.target))
+        setOpen(false);
+    };
+    document.addEventListener('pointerdown', onDown);
+    return () => document.removeEventListener('pointerdown', onDown);
+  }, [open]);
+
+  const handlers = interactive
+    ? {
+        onMouseEnter: () => setOpen(true),
+        onMouseLeave: () => setOpen(false),
+        onClick: () => setOpen(true), // tap on touch; outside tap closes
+        onFocus: () => setOpen(true),
+        onBlur: (e) => {
+          if (!e.currentTarget.contains(e.relatedTarget)) setOpen(false);
+        },
+        onKeyDown: (e) => e.key === 'Escape' && setOpen(false),
+        tabIndex: 0,
+      }
+    : {};
+
   return (
     <div
-      className={`z-999 p-6 md:p-8 border-line ${
-        big
-          ? 'col-span-2 border-b md:border-b-0 md:border-r'
-          : 'border-t md:border-t-0 md:border-r last:border-r-0 border-line'
-      }`}
+      ref={rootRef}
+      {...handlers}
+      style={open ? { zIndex: 1000 } : undefined}
+      className={`relative z-999 p-6 md:p-8 border-r border-b border-line outline-none ${
+        interactive ? 'cursor-pointer group' : ''
+      } ${big ? 'col-span-2' : ''}`}
     >
       <div
         className={`font-mono tabular-nums text-teal ${
@@ -158,9 +213,157 @@ function Stat({ value, label, big }) {
       <div className="mt-2 text-xs md:text-sm text-ink-faint leading-snug max-w-[18ch]">
         {label}
       </div>
+
+      {interactive && (
+        <div className="mt-3 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-amber opacity-70 group-hover:opacity-100 transition-opacity">
+          {hint ?? "What's this?"}
+          <span
+            className={`inline-block transition-transform duration-200 ${
+              open ? 'rotate-180' : ''
+            }`}
+          >
+            ▲
+          </span>
+        </div>
+      )}
+
+      <AnimatePresence>
+        {open && interactive && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            onClick={(e) => e.stopPropagation()}
+            // bottom-full with no margin = no hover gap between the stat and the card
+            className={`absolute bottom-full ${popoverClass} ${
+              popover
+                ? 'w-[min(26rem,calc(100vw-2rem))]'
+                : 'w-[min(18rem,calc(100vw-2rem))]'
+            } cursor-default`}
+          >
+            <div className={panel}>
+              {info && <InfoBlock text={info} divider={Boolean(popover)} />}
+              {popover}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
+
+/* ---------- Popover contents ---------- */
+
+// Glass panel. Swap bg-[#0c0c0d] for your background token if you have one.
+const panel =
+  'border border-line/70 bg-[#0c0c0d]/90 backdrop-blur-md backdrop-saturate-150 shadow-2xl';
+
+function InfoBlock({ text, divider }) {
+  return (
+    <div className={`px-4 py-3 ${divider ? 'border-b border-line/70' : ''}`}>
+      <div className="font-mono text-[10px] uppercase tracking-wider text-amber">
+        What this means
+      </div>
+      <p className="mt-1 font-display text-[13px] leading-relaxed text-ink-dim">
+        {text}
+      </p>
+    </div>
+  );
+}
+
+function ListHeader({ title, count }) {
+  return (
+    <div className="flex items-center justify-between px-4 py-2.5 border-b border-line/70 font-display text-[11px] uppercase tracking-wider text-ink-faint">
+      <span>{title}</span>
+      <span>{count}</span>
+    </div>
+  );
+}
+
+function VideosList({ title, videos, viewsById }) {
+  return (
+    <>
+      <ListHeader title={title} count={videos.length} />
+      <ul className="max-h-72 overflow-y-auto overscroll-contain">
+        {videos.map((v, i) => {
+          const views = viewsById[v.yt_id];
+          return (
+            <li key={v.yt_id}>
+              <a
+                href={`https://www.youtube.com/watch?v=${v.yt_id}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 px-3 py-2 hover:bg-white/5 transition-colors"
+              >
+                <span className="w-5 shrink-0 text-right font-mono text-[10px] text-ink-faint">
+                  {i + 1}
+                </span>
+                <img
+                  src={`https://i.ytimg.com/vi/${v.yt_id}/mqdefault.jpg`}
+                  alt=""
+                  loading="lazy"
+                  className="w-20 shrink-0 aspect-video object-cover bg-black"
+                />
+                <p className="min-w-0 flex-1 font-display text-sm font-medium leading-snug text-ink line-clamp-2">
+                  {v.title}
+                </p>
+                <span className="shrink-0 font-mono text-xs text-teal">
+                  {views != null ? compact.format(views) : '…'}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
+function ChannelsList({ channels }) {
+  return (
+    <>
+      <ListHeader title="Creator channels" count={channels.length} />
+      <ul className="max-h-72 overflow-y-auto overscroll-contain">
+        {channels.map((c) => (
+          <li key={c.handle}>
+            <a
+              href={`https://www.youtube.com/${c.handle}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 transition-colors"
+            >
+              <img
+                src={c.avatar}
+                alt=""
+                loading="lazy"
+                referrerPolicy="no-referrer"
+                className="w-10 h-10 shrink-0 rounded-full object-cover"
+                style={{ backgroundColor: `#${c.color}` }}
+              />
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-sm font-semibold text-ink truncate">
+                  {c.name}
+                </p>
+                <p className="font-display text-xs text-ink-faint truncate">
+                  {c.niche} · since {c.since}
+                </p>
+              </div>
+              <div className="shrink-0 text-right font-mono text-xs">
+                <div className="text-teal">{c.subs} subs</div>
+                <div className="text-ink-faint">
+                  {compact.format(c.views)} views
+                </div>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+/* ---------- Waveform (unchanged) ---------- */
 
 export function Waveform({ activeBar, setActiveBar }) {
   const [time, setTime] = useState(0);
@@ -181,11 +384,11 @@ export function Waveform({ activeBar, setActiveBar }) {
   const bars = Array.from({ length: 140 }).map((_, i) => {
     const speed = 0.8;
     const t = time * speed;
-    const h =
+    return (
       6 +
       Math.abs(Math.sin(i * 0.35 + t * 1.8)) * 40 +
-      Math.abs(Math.sin(i * 0.9 - t * 2.2)) * 14;
-    return h;
+      Math.abs(Math.sin(i * 0.9 - t * 2.2)) * 14
+    );
   });
 
   return (

@@ -1,6 +1,37 @@
 import { clientChannels } from '../data.js';
+import { useYouTubeChannels } from '../hooks/useYouTubeChannels.js';
+
+function formatYtSubs(num) {
+  if (!num || num < 0) return '0';
+
+  const lookup = [
+    { value: 1e9, symbol: 'B' }, // Billions
+    { value: 1e6, symbol: 'M' }, // Millions
+    { value: 1e3, symbol: 'K' }, // Thousands
+  ];
+
+  const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+  const item = lookup.find((item) => num >= item.value);
+
+  if (item) {
+    const decimals = item.symbol === 'K' ? 1 : 2;
+    const formatted = (num / item.value).toFixed(decimals);
+
+    return formatted.replace(rx, '$1') + item.symbol;
+  }
+
+  return num.toString();
+}
 
 export default function ClientChannels() {
+  const clientChannelIds = clientChannels.map((ch) => ch.yt_id);
+  const { subsById } = useYouTubeChannels(clientChannelIds);
+
+  const channels = clientChannels?.map((channel) => ({
+    ...channel,
+    subs: formatYtSubs(subsById[channel.yt_id]) || 0,
+  }));
+
   return (
     <section id="clients" className="border-b border-line py-20 md:py-28">
       <div className="mx-auto max-w-[1400px] px-4 md:px-8">
@@ -11,7 +42,7 @@ export default function ClientChannels() {
             so sparse items never display awkward empty gray background areas */}
         <div className="mt-12 w-full overflow-x-auto pb-4 scrollbar-none">
           <div className="flex gap-4 md:gap-6 min-w-full py-2">
-            {clientChannels.map((c) => (
+            {channels.map((c) => (
               <div
                 key={c.handle}
                 className="min-w-[260px] md:min-w-[280px] flex-1 bg-panel border border-line p-6 flex flex-col justify-between transition-all duration-200 hover:border-amber/50 hover:-translate-y-1"
