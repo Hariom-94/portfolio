@@ -10,6 +10,7 @@ const thumbUrl = (r) =>
 export default function FeaturedReel() {
   const [active, setActive] = useState(0);
   const reel = featuredReels[active];
+  const isVertical = reel.aspectRatio === '9/16' || reel.category === 'Shorts';
 
   const playerRef = useRef(null); // the <mux-player> element
   const wrapRef = useRef(null); // the box around the player
@@ -21,6 +22,9 @@ export default function FeaturedReel() {
 
     const io = new IntersectionObserver(
       ([entry]) => {
+        // Don't pause while the player is fullscreen
+        if (document.fullscreenElement || document.webkitFullscreenElement)
+          return;
         if (!entry.isIntersecting) playerRef.current?.pause?.();
       },
       { threshold: 0.25 }, // pause once less than 25% of it is visible
@@ -29,6 +33,33 @@ export default function FeaturedReel() {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  // When the player's own fullscreen button is pressed, rotate to landscape
+  // (landscape videos only). Release the lock when leaving fullscreen.
+  // Works on Android Chrome; iPhone Safari rotates with the phone by itself.
+  useEffect(() => {
+    const onFsChange = async () => {
+      const fsEl =
+        document.fullscreenElement || document.webkitFullscreenElement;
+      try {
+        if (fsEl && !isVertical) await screen.orientation?.lock?.('landscape');
+        else screen.orientation?.unlock?.();
+      } catch {
+        // Not supported or not allowed, ignore
+      }
+    };
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+      try {
+        screen.orientation?.unlock?.();
+      } catch {
+        // ignore
+      }
+    };
+  }, [isVertical]);
 
   return (
     <section id="reel" className="border-b border-line py-20 md:py-28">
@@ -54,6 +85,11 @@ export default function FeaturedReel() {
               secondaryColor="#0E1113"
               accentColor="#E8A33D"
               className="block w-full max-w-full"
+              style={{
+                aspectRatio: reel.aspectRatio === '16/9' ? '16 / 9' : '9 / 16',
+                '--media-object-fit': 'contain',
+                '--media-object-position': 'center',
+              }}
             />
 
             <div className="mt-5 flex items-start justify-between gap-4">

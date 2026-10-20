@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import MuxPlayer from '@mux/mux-player-react';
-import { X, Play, Eye, Sparkles } from 'lucide-react';
+import { X, Play, Eye } from 'lucide-react';
 import { portfolioItems, categories } from '../data.js';
 import { SectionHeading } from './ClientChannels.jsx';
 
@@ -136,6 +136,34 @@ function thumbnailUrl(playbackId, time = 1) {
 
 function PlayerModal({ item, onClose }) {
   const isVertical = item.aspectRatio === '9/16' || item.category === 'Shorts';
+  const playerRef = useRef(null);
+
+  // When the player's own fullscreen button is pressed, rotate to landscape
+  // (landscape videos only). Release the lock when leaving fullscreen.
+  // Works on Android Chrome; iPhone Safari rotates with the phone by itself.
+  useEffect(() => {
+    const onFsChange = async () => {
+      const fsEl =
+        document.fullscreenElement || document.webkitFullscreenElement;
+      try {
+        if (fsEl && !isVertical) await screen.orientation?.lock?.('landscape');
+        else screen.orientation?.unlock?.();
+      } catch {
+        // Not supported or not allowed, ignore
+      }
+    };
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      document.removeEventListener('webkitfullscreenchange', onFsChange);
+      try {
+        screen.orientation?.unlock?.();
+      } catch {
+        // ignore
+      }
+    };
+  }, [isVertical]);
 
   return (
     <div
@@ -184,6 +212,7 @@ function PlayerModal({ item, onClose }) {
         {/* Player */}
         <div className="p-2 md:p-4 bg-black">
           <MuxPlayer
+            ref={playerRef}
             playbackId={item.playbackId}
             streamType="on-demand"
             autoPlay
@@ -196,7 +225,9 @@ function PlayerModal({ item, onClose }) {
             accentColor="#E8A33D"
             style={{
               width: '100%',
-              aspectRatio: isVertical ? '9/16' : '16/9',
+              aspectRatio: item.aspectRatio === '16/9' ? '16 / 9' : '9 / 16',
+              '--media-object-fit': 'contain',
+              '--media-object-position': 'center',
               borderRadius: '4px',
               overflow: 'hidden',
             }}
