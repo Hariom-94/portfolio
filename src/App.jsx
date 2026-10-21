@@ -63,8 +63,10 @@ export default function App() {
         <ClientChannels />
         <FeaturedReel />
         <ColorGradeCompare
-          leftSrc="UClLjGQRb2BocMxlocLmqDx02O01ZdR014ge3bhVyPuGIM"
-          rightSrc="ah802h00ozFV1F00EYJHl1Mm02xmhOt7NGMaoN9FdvoDBnI"
+          leftSrc="https://stream.mux.com/UClLjGQRb2BocMxlocLmqDx02O01ZdR014ge3bhVyPuGIM/high.mp4"
+          shortsLeftSrc="https://stream.mux.com/UClLjGQRb2BocMxlocLmqDx02O01ZdR014ge3bhVyPuGIM/high.mp4"
+          rightSrc="https://stream.mux.com/ah802h00ozFV1F00EYJHl1Mm02xmhOt7NGMaoN9FdvoDBnI/high.mp4"
+          shortsRightSrc="https://stream.mux.com/ah802h00ozFV1F00EYJHl1Mm02xmhOt7NGMaoN9FdvoDBnI/high.mp4"
         />
         <PortfolioGrid />
         <Contact />

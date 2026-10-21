@@ -5,7 +5,7 @@ export default function SoftwareSkills() {
   return (
     <section
       id="software"
-      className="border-b border-line py-16 md:py-28 bg-bg"
+      className="z-0 border-b border-line py-16 md:py-28 bg-bg"
     >
       <div className="mx-auto max-w-[1400px] px-4 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-8 md:mb-12">

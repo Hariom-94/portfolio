@@ -126,7 +126,7 @@ export const featuredReels = [
     client: '',
     category: 'Long-form',
     duration: '01:12',
-    views: '3.1M views',
+    // views: '3.1M views',
     playbackId: '00WGqwBkF7wjcmC57Jaix8XrvKRGEuinQHT01GzYyQ02mI',
     aspectRatio: '16/9',
     thumbTime: 3, // 31 || 36
@@ -138,7 +138,7 @@ export const featuredReels = [
     client: '',
     category: 'Long-form',
     duration: '01:50',
-    views: '2.6M views',
+    // views: '2.6M views',
     playbackId: 'KpD00XW02yKVHHUAV966qaReCETIr2dJMId02Eg7izSgz00',
     aspectRatio: '16/9',
     thumbTime: 56,

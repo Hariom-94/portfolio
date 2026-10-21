@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clientChannels, edited_videos } from '../data';
 import { useEditedVideoViews } from '../hooks/useEditedVideoViews';
@@ -102,7 +102,6 @@ export default function Hero() {
             value={clientChannels.length}
             label="Creator channels"
             hint="Who I've worked with"
-            popoverClass="right-0"
             info="YouTube channels I've edited videos for. The subscriber and view numbers inside are the whole channel's totals, not just my videos."
             popover={<ChannelsList channels={rankedChannels} />}
           />
@@ -127,7 +126,6 @@ export default function Hero() {
             value={ready ? compact.format(topViews) : '—'}
             label="Views on my best video"
             hint="Top 5 videos"
-            popoverClass="right-0 md:right-auto md:left-0"
             info="Views on the single most-watched video I edited. Hover to see the top five."
             popover={
               <VideosList
@@ -145,7 +143,6 @@ export default function Hero() {
           <Stat
             value={ready ? `${likeRate.toFixed(1)}%` : '—'}
             label="Like rate across edits"
-            popoverClass="right-0"
             info="Likes divided by views across the videos I edited. Videos that hide their like count are counted as zero, so the real rate may be slightly higher."
           />
         </motion.div>
@@ -156,18 +153,83 @@ export default function Hero() {
 
 /* ---------- Stat: opens an explanation (and optional list) on hover / tap / focus ---------- */
 
-function Stat({
-  value,
-  label,
-  big,
-  info,
-  hint,
-  popover,
-  popoverClass = 'left-0',
-}) {
+const EDGE = 16; // min gap kept between the popover and the viewport edge
+const MAX_PANEL_H = 480; // never taller than this, even with lots of room
+
+// The area the popover can really be seen in: the viewport, shrunk by any
+// ancestor that clips its content (overflow hidden / auto / scroll / clip).
+// This is what stops a popover being cut off by the hero's overflow-hidden.
+function getVisibleBounds(el) {
+  const clips = /(hidden|clip|auto|scroll)/;
+  let top = 0;
+  let left = 0;
+  let right = window.innerWidth;
+  let bottom = window.innerHeight;
+
+  let p = el.parentElement;
+  while (p && p !== document.body && p !== document.documentElement) {
+    const cs = getComputedStyle(p);
+    if (clips.test(cs.overflowX) || clips.test(cs.overflowY)) {
+      const r = p.getBoundingClientRect();
+      top = Math.max(top, r.top);
+      left = Math.max(left, r.left);
+      right = Math.min(right, r.right);
+      bottom = Math.min(bottom, r.bottom);
+    }
+    p = p.parentElement;
+  }
+  return { top, left, right, bottom };
+}
+
+function Stat({ value, label, big, info, hint, popover }) {
   const [open, setOpen] = useState(false);
+  const [place, setPlace] = useState(null); // { v: 'above'|'below', h: 'left'|'right', maxH }
   const rootRef = useRef(null);
   const interactive = Boolean(info || popover);
+  const hasList = Boolean(popover);
+
+  // Pick the side of the stat that has the most visible room.
+  // Re-measured on open, resize and scroll so it always stays in view.
+  useLayoutEffect(() => {
+    if (!open) {
+      setPlace(null);
+      return;
+    }
+
+    const measure = () => {
+      const el = rootRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const b = getVisibleBounds(el);
+
+      // vertical: whichever side has more VISIBLE space
+      const above = r.top - b.top - EDGE;
+      const below = b.bottom - r.bottom - EDGE;
+      const v = below > above ? 'below' : 'above';
+      const room = v === 'below' ? below : above;
+      const maxH = Math.max(160, Math.min(room, MAX_PANEL_H));
+
+      // horizontal: align to the left edge unless that overflows more
+      const w = Math.min(hasList ? 416 : 288, b.right - b.left - 2 * EDGE);
+      const overflowIfLeft = Math.max(0, r.left + w - (b.right - EDGE));
+      const overflowIfRight = Math.max(0, b.left + EDGE - (r.right - w));
+      const h = overflowIfLeft <= overflowIfRight ? 'left' : 'right';
+
+      setPlace((prev) =>
+        prev && prev.v === v && prev.h === h && prev.maxH === maxH
+          ? prev
+          : { v, h, maxH },
+      );
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+    window.addEventListener('scroll', measure, true);
+    return () => {
+      window.removeEventListener('resize', measure);
+      window.removeEventListener('scroll', measure, true);
+    };
+  }, [open, hasList]);
 
   // Close when tapping/clicking outside (needed for touch devices)
   useEffect(() => {
@@ -193,6 +255,8 @@ function Stat({
         tabIndex: 0,
       }
     : {};
+
+  const slide = place?.v === 'above' ? 8 : -8;
 
   return (
     <div
@@ -228,22 +292,27 @@ function Stat({
       )}
 
       <AnimatePresence>
-        {open && interactive && (
+        {open && interactive && place && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: slide }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
+            exit={{ opacity: 0, y: slide }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
             onClick={(e) => e.stopPropagation()}
-            // bottom-full with no margin = no hover gap between the stat and the card
-            className={`absolute bottom-full ${popoverClass} ${
-              popover
+            // flush against the stat (no margin) = no hover gap
+            className={`absolute ${
+              place.v === 'above' ? 'bottom-full' : 'top-full'
+            } ${place.h === 'left' ? 'left-0' : 'right-0'} ${
+              hasList
                 ? 'w-[min(26rem,calc(100vw-2rem))]'
                 : 'w-[min(18rem,calc(100vw-2rem))]'
             } cursor-default`}
           >
-            <div className={panel}>
-              {info && <InfoBlock text={info} divider={Boolean(popover)} />}
+            <div
+              className={`${panel} flex flex-col`}
+              style={{ maxHeight: place.maxH }}
+            >
+              {info && <InfoBlock text={info} divider={hasList} />}
               {popover}
             </div>
           </motion.div>
@@ -257,15 +326,16 @@ function Stat({
 
 // Glass panel. Swap bg-[#0c0c0d] for your background token if you have one.
 const panel =
-  'border border-line/70 bg-[#0c0c0d]/90 backdrop-blur-md backdrop-saturate-150 shadow-2xl';
+  'border border-line/70 bg-[#0c0c0d]/80 backdrop-blur-lg backdrop-saturate-150 shadow-2xl';
 
 function InfoBlock({ text, divider }) {
   return (
-    <div className={`px-4 py-3 ${divider ? 'border-b border-line/70' : ''}`}>
-      <div className="font-mono text-[10px] uppercase tracking-wider text-amber">
-        What this means
-      </div>
-      <p className="mt-1 font-display text-[13px] leading-relaxed text-ink-dim">
+    <div
+      className={`shrink-0 px-4 py-3 ${
+        divider ? 'border-b border-line/70' : ''
+      }`}
+    >
+      <p className="font-display text-[13px] leading-relaxed text-ink-dim">
         {text}
       </p>
     </div>
@@ -274,7 +344,7 @@ function InfoBlock({ text, divider }) {
 
 function ListHeader({ title, count }) {
   return (
-    <div className="flex items-center justify-between px-4 py-2.5 border-b border-line/70 font-display text-[11px] uppercase tracking-wider text-ink-faint">
+    <div className="shrink-0 flex items-center justify-between px-4 py-2.5 border-b border-line/70 font-display text-[11px] uppercase tracking-wider text-ink-faint">
       <span>{title}</span>
       <span>{count}</span>
     </div>
@@ -285,7 +355,7 @@ function VideosList({ title, videos, viewsById }) {
   return (
     <>
       <ListHeader title={title} count={videos.length} />
-      <ul className="max-h-72 overflow-y-auto overscroll-contain">
+      <ul className="min-h-0 max-h-72 overflow-y-auto overscroll-contain">
         {videos.map((v, i) => {
           const views = viewsById[v.yt_id];
           return (
@@ -324,7 +394,7 @@ function ChannelsList({ channels }) {
   return (
     <>
       <ListHeader title="Creator channels" count={channels.length} />
-      <ul className="max-h-72 overflow-y-auto overscroll-contain">
+      <ul className="min-h-0 max-h-72 overflow-y-auto overscroll-contain">
         {channels.map((c) => (
           <li key={c.handle}>
             <a

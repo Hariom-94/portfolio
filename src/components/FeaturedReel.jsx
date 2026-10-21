@@ -154,7 +154,9 @@ export default function FeaturedReel() {
                     {r.title}
                   </span>
                   <span className="block text-xs text-ink-faint mt-0.5">
-                    {r?.client !== '' ? r.client + ' /' : ''} {r.views}
+                    {r?.client !== ''
+                      ? r.client + ` / ${r.views}`
+                      : 'Self Practice'}
                   </span>
                 </span>
               </button>

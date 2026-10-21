@@ -21,9 +21,6 @@ export default function PortfolioGrid() {
       id="work"
       className="border-b border-line py-20 md:py-28 relative overflow-hidden"
     >
-      {/* Background ambient glow matching your video workspace aesthetic */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-amber/5 blur-[120px] pointer-events-none rounded-full" />
-
       <div className="mx-auto max-w-[1400px] px-4 md:px-8 relative z-10">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
